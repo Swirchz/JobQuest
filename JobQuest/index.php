@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $job_title = $_POST['job_title'];
     $job_link = empty($_POST['job_link']) ? "N/A" : $_POST['job_link']; // this line
     $date_applied = $_POST['date_applied'];
+    $place = $_POST['place'];
     $status = $_POST['status'];
     $notes = $_POST['notes'];
 
@@ -38,15 +39,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Insert into database
     $sql = "INSERT INTO applications 
-        (company_name, job_title, job_link, date_applied, status, notes, resume_file, cover_letter_file, screenshot_file) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        (company_name, job_title, job_link, date_applied, place, status, notes, resume_file, cover_letter_file, screenshot_file) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssss", 
+    $stmt->bind_param("ssssssssss", 
         $company_name, 
         $job_title, 
         $job_link, 
-        $date_applied, 
+        $date_applied,
+        $place, 
         $status, 
         $notes, 
         $resume_file, 
@@ -165,6 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     data-title="<?= htmlspecialchars($row['job_title']) ?>" 
                                                     data-link="<?= htmlspecialchars($row['job_link']) ?>" 
                                                     data-date="<?= htmlspecialchars($row['date_applied']) ?>" 
+                                                     data-place="<?= htmlspecialchars($row['place']) ?>" 
                                                     data-status="<?= htmlspecialchars($row['status']) ?>" 
                                                     data-notes="<?= htmlspecialchars($row['notes']) ?>">
                                                     View
@@ -214,6 +217,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <div class="mb-3">
                                                     <label class="form-label">Date Applied:</label>
                                                     <input type="date" name="date_applied" class="form-control" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Place:</label>
+                                                    <input type="text" name="place" class="form-control" required>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Status:</label>
@@ -345,6 +352,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <a id="modalLink" href="#" target="_blank" class="d-block text-break"></a>
                                         </p>
                                         <p><strong>Date Applied:</strong> <span id="modalDate"></span></p>
+                                        <p><strong>Place:</strong> <span id="modalPlace"></span></p>
                                         <p><strong>Status:</strong> <span id="modalStatus"></span></p>
                                         <p><strong>Notes:</strong></p>
                                         <p id="modalNotes"></p>
@@ -426,6 +434,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 document.getElementById("modalTitle").textContent = this.getAttribute("data-title");
                 document.getElementById("modalLink").textContent = this.getAttribute("data-link");
                 document.getElementById("modalDate").textContent = this.getAttribute("data-date");
+                document.getElementById("modalPlace").textContent = this.getAttribute("data-place");
                 document.getElementById("modalStatus").textContent = this.getAttribute("data-status");
                 document.getElementById("modalNotes").textContent = this.getAttribute("data-notes");
                 document.getElementById("modalLink").textContent = this.getAttribute("data-link");
