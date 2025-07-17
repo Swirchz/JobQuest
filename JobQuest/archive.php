@@ -1,10 +1,6 @@
 <?php
 // Connect to DB
-$conn = new mysqli("localhost", "root", "", "jobquest");
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'db_connect.php'; // Include connection
 
 // If archive is triggered via GET
 if (isset($_GET['id'])) {
@@ -125,6 +121,7 @@ if (!$jobs) {
                                                     data-title="<?= htmlspecialchars($row['job_title']) ?>" 
                                                     data-link="<?= htmlspecialchars($row['job_link']) ?>" 
                                                     data-date="<?= htmlspecialchars($row['date_applied']) ?>" 
+                                                    data-place="<?= htmlspecialchars($row['place']) ?>" 
                                                     data-status="<?= htmlspecialchars($row['status']) ?>" 
                                                     data-notes="<?= htmlspecialchars($row['notes']) ?>">
                                                     View
@@ -162,6 +159,7 @@ if (!$jobs) {
                                             <a id="modalLink" href="#" target="_blank" class="d-block text-break"></a>
                                         </p>
                                         <p><strong>Date Applied:</strong> <span id="modalDate"></span></p>
+                                        <p><strong>Place</strong> <span id="modalPlace"></span></p>
                                         <p><strong>Status:</strong> <span id="modalStatus"></span></p>
                                         <p><strong>Notes:</strong></p>
                                         <p id="modalNotes"></p>
@@ -226,6 +224,7 @@ if (!$jobs) {
                 document.getElementById("modalTitle").textContent = this.getAttribute("data-title");
                 document.getElementById("modalLink").textContent = this.getAttribute("data-link");
                 document.getElementById("modalDate").textContent = this.getAttribute("data-date");
+                document.getElementById("modalPlace").textContent = this.getAttribute("data-place");
                 document.getElementById("modalStatus").textContent = this.getAttribute("data-status");
                 document.getElementById("modalNotes").textContent = this.getAttribute("data-notes");
                 document.getElementById("modalLink").textContent = this.getAttribute("data-link");
